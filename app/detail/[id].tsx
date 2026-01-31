@@ -1,4 +1,3 @@
-// app/detail/[id].tsx
 import React, { useState } from "react";
 import {
   View,
@@ -9,8 +8,9 @@ import {
   Image,
   Dimensions,
 } from "react-native";
-import { Link, useLocalSearchParams, router } from "expo-router";
-import { colors, typography } from "@/constants/theme";
+import { router, useLocalSearchParams } from "expo-router";
+import { colors } from "@/constants/theme";
+import { FAIcon, Icon } from "@/components/Icons";
 
 const { width } = Dimensions.get("window");
 
@@ -18,7 +18,7 @@ const coffeeData = [
   {
     id: 1,
     name: "Caffè Mocha",
-    fullPrice: "$4.83 ($2.30)",
+    fullPrice: "$4.83",
     description:
       "A cappuccino is an approximately 150 ml (5 oz) beverage, with 25 ml of espresso coffee and 85 ml of fresh milk tea.",
     image: require("@/assets/images/mocha.png"),
@@ -27,7 +27,7 @@ const coffeeData = [
   {
     id: 2,
     name: "Espresso",
-    fullPrice: "$3.80 ($1.80)",
+    fullPrice: "$3.80",
     description: "Strong and bold espresso shot with rich crema.",
     image: require("@/assets/images/espresso.jpg"),
     price: 3.5,
@@ -35,7 +35,7 @@ const coffeeData = [
   {
     id: 3,
     name: "Cappuccino",
-    fullPrice: "$4.50 ($2.10)",
+    fullPrice: "$4.50",
     description: "Perfect balance of espresso, steamed milk, and foam.",
     image: require("@/assets/images/cappuccino.png"),
     price: 4.2,
@@ -58,43 +58,45 @@ export default function DetailScreen() {
     );
   }
 
-  const handleSizeSelect = (size: string) => {
-    setSelectedSize(size);
-  };
-
-  const handleBuyNow = () => {
-    router.push("/order");
-  };
-
   return (
     <View style={styles.container}>
+      {/* Status Bar */}
       <View style={styles.statusBar}>
         <Text style={styles.time}>9:41</Text>
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>
+        {/* Back Button */}
         <TouchableOpacity
           style={styles.backButton}
           onPress={() => router.back()}
           activeOpacity={0.8}
         >
-          <Text style={styles.backText}>←</Text>
+          <FAIcon name={Icon.arrowLeft} size={24} color={colors.darkBrown} />
         </TouchableOpacity>
 
-        <Image source={coffeeItem.image} style={styles.detailImage} />
+        {/* Coffee Image */}
+        <Image source={coffeeItem.image} style={styles.coffeeImage} />
 
         <View style={styles.content}>
           <Text style={styles.coffeeTitle}>{coffeeItem.name}</Text>
           <Text style={styles.coffeePrice}>{coffeeItem.fullPrice}</Text>
 
+          {/* Description */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Description</Text>
             <Text style={styles.description}>{coffeeItem.description}</Text>
-            <TouchableOpacity activeOpacity={0.7}>
-              <Text style={styles.readMore}>Read More</Text>
+            <TouchableOpacity style={styles.readMore}>
+              <Text style={styles.readMoreText}>Read More</Text>
+              <FAIcon
+                name={Icon.chevronRight}
+                size={14}
+                color={colors.primary}
+              />
             </TouchableOpacity>
           </View>
 
+          {/* Size */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Size</Text>
             <View style={styles.sizeContainer}>
@@ -105,7 +107,7 @@ export default function DetailScreen() {
                     styles.sizeButton,
                     selectedSize === size && styles.sizeButtonSelected,
                   ]}
-                  onPress={() => handleSizeSelect(size)}
+                  onPress={() => setSelectedSize(size)}
                   activeOpacity={0.8}
                 >
                   <Text
@@ -121,17 +123,20 @@ export default function DetailScreen() {
             </View>
           </View>
 
+          {/* Price */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Price</Text>
             <Text style={styles.price}>${coffeeItem.price.toFixed(2)}</Text>
           </View>
 
+          {/* Buy Now Button */}
           <TouchableOpacity
             style={styles.buyButton}
-            onPress={handleBuyNow}
+            onPress={() => router.push("/order")}
             activeOpacity={0.8}
           >
             <Text style={styles.buyButtonText}>Buy Now</Text>
+            <FAIcon name={Icon.shoppingCart} size={20} color={colors.white} />
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -148,11 +153,17 @@ const styles = StyleSheet.create({
     paddingTop: 40,
     paddingHorizontal: 20,
     alignItems: "flex-end",
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 10,
   },
   time: {
     fontSize: 16,
-    fontFamily: typography.fontFamily,
+    fontFamily: "System",
     color: colors.black,
+    fontWeight: "600",
   },
   backButton: {
     position: "absolute",
@@ -165,13 +176,13 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
+    shadowColor: colors.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
     elevation: 3,
   },
-  backText: {
-    fontSize: 24,
-    color: colors.darkBrown,
-  },
-  detailImage: {
+  coffeeImage: {
     width,
     height: 300,
     resizeMode: "cover",
@@ -181,13 +192,15 @@ const styles = StyleSheet.create({
   },
   coffeeTitle: {
     fontSize: 28,
-    fontFamily: typography.fontFamilyBold,
+    fontFamily: "System",
+    fontWeight: "bold",
     color: colors.darkBrown,
     marginBottom: 8,
   },
   coffeePrice: {
     fontSize: 20,
-    fontFamily: typography.fontFamilySemiBold,
+    fontFamily: "System",
+    fontWeight: "600",
     color: colors.primary,
     marginBottom: 30,
   },
@@ -196,21 +209,27 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 18,
-    fontFamily: typography.fontFamilyBold,
+    fontFamily: "System",
+    fontWeight: "bold",
     color: colors.darkBrown,
-    marginBottom: 10,
+    marginBottom: 15,
   },
   description: {
     fontSize: 14,
-    fontFamily: typography.fontFamily,
     color: colors.textLight,
     lineHeight: 22,
     marginBottom: 10,
   },
   readMore: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5,
+  },
+  readMoreText: {
     fontSize: 14,
-    fontFamily: typography.fontFamilySemiBold,
     color: colors.primary,
+    fontFamily: "System",
+    fontWeight: "600",
   },
   sizeContainer: {
     flexDirection: "row",
@@ -232,7 +251,8 @@ const styles = StyleSheet.create({
   },
   sizeText: {
     fontSize: 18,
-    fontFamily: typography.fontFamilySemiBold,
+    fontFamily: "System",
+    fontWeight: "600",
     color: colors.textDark,
   },
   sizeTextSelected: {
@@ -240,20 +260,29 @@ const styles = StyleSheet.create({
   },
   price: {
     fontSize: 32,
-    fontFamily: typography.fontFamilyBold,
+    fontFamily: "System",
+    fontWeight: "bold",
     color: colors.primary,
   },
   buyButton: {
     backgroundColor: colors.primary,
     paddingVertical: 18,
     borderRadius: 30,
+    flexDirection: "row",
+    justifyContent: "center",
     alignItems: "center",
+    gap: 10,
     marginTop: 20,
+    shadowColor: colors.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
     elevation: 3,
   },
   buyButtonText: {
     color: colors.white,
     fontSize: 18,
-    fontFamily: typography.fontFamilySemiBold,
+    fontFamily: "System",
+    fontWeight: "600",
   },
 });

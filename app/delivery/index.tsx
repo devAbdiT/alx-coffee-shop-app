@@ -1,4 +1,3 @@
-// app/delivery/index.tsx
 import React, { useState } from "react";
 import {
   View,
@@ -9,7 +8,8 @@ import {
   Dimensions,
   Image,
 } from "react-native";
-import { colors, typography } from "@/constants/theme";
+import { colors } from "@/constants/theme";
+import { FAIcon, Icon } from "@/components/Icons";
 
 const { width } = Dimensions.get("window");
 
@@ -18,30 +18,36 @@ type DeliveryType = "delivery" | "pickup";
 export default function DeliveryScreen() {
   const [deliveryType, setDeliveryType] = useState<DeliveryType>("delivery");
 
-  const handleDeliveryTypeChange = (type: DeliveryType) => {
-    setDeliveryType(type);
-  };
-
   return (
     <View style={styles.container}>
+      {/* Status Bar */}
       <View style={styles.statusBar}>
         <Text style={styles.time}>9:41</Text>
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>
+        {/* Header */}
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Delivery</Text>
         </View>
 
+        {/* Delivery Type */}
         <View style={styles.deliveryType}>
           <TouchableOpacity
             style={[
               styles.typeButton,
               deliveryType === "delivery" && styles.typeButtonActive,
             ]}
-            onPress={() => handleDeliveryTypeChange("delivery")}
+            onPress={() => setDeliveryType("delivery")}
             activeOpacity={0.8}
           >
+            <FAIcon
+              name={Icon.truck}
+              size={20}
+              color={
+                deliveryType === "delivery" ? colors.white : colors.textDark
+              }
+            />
             <Text
               style={[
                 styles.typeText,
@@ -56,9 +62,14 @@ export default function DeliveryScreen() {
               styles.typeButton,
               deliveryType === "pickup" && styles.typeButtonActive,
             ]}
-            onPress={() => handleDeliveryTypeChange("pickup")}
+            onPress={() => setDeliveryType("pickup")}
             activeOpacity={0.8}
           >
+            <FAIcon
+              name={Icon.shoppingCart}
+              size={20}
+              color={deliveryType === "pickup" ? colors.white : colors.textDark}
+            />
             <Text
               style={[
                 styles.typeText,
@@ -70,44 +81,62 @@ export default function DeliveryScreen() {
           </TouchableOpacity>
         </View>
 
+        {/* Delivery Info */}
         <View style={styles.deliveryInfo}>
+          <FAIcon
+            name={Icon.truck}
+            size={40}
+            color={colors.primary}
+            style={styles.infoIcon}
+          />
           <Text style={styles.infoTitle}>Deliver your order</Text>
           <Text style={styles.infoSubtitle}>
             We will deliver your goods to you in the shortest possible time.
           </Text>
         </View>
 
+        {/* Courier Card */}
         <View style={styles.courierCard}>
           <View style={styles.courierInfo}>
             <Image
-              source={require("@/assets/images/courier-avatar.jpg")}
+              source={{
+                uri: "https://images.unsplash.com/photo-1494790108755-2616b786d4d9",
+              }}
               style={styles.courierAvatar}
             />
             <View style={styles.courierDetails}>
               <Text style={styles.courierName}>Brooklyn Simmons</Text>
               <Text style={styles.courierRole}>Personal Courier</Text>
             </View>
+            <TouchableOpacity>
+              <FAIcon name={Icon.phone} size={24} color={colors.primary} />
+            </TouchableOpacity>
           </View>
           <View style={styles.timeRemaining}>
-            <Text style={styles.timeText}>10 minutes left</Text>
+            <View style={styles.timeContainer}>
+              <FAIcon name={Icon.clock} size={20} color={colors.primary} />
+              <Text style={styles.timeText}>10 minutes left</Text>
+            </View>
             <Text style={styles.deliveryAddress}>
               Delivery to Jl. Kpg Sutoyo
             </Text>
           </View>
         </View>
 
-        <View style={styles.deliveryStatus}>
-          <Text style={styles.statusTitle}>Delivered your order</Text>
-          <Text style={styles.statusSubtitle}>
-            We will deliver your goods to you in the shortest possible time.
-          </Text>
-        </View>
-
+        {/* Map Section */}
         <View style={styles.mapSection}>
-          <Text style={styles.mapTitle}>Map</Text>
+          <View style={styles.mapHeader}>
+            <Text style={styles.mapTitle}>Map</Text>
+            <TouchableOpacity>
+              <FAIcon name={Icon.info} size={20} color={colors.textLight} />
+            </TouchableOpacity>
+          </View>
           <View style={styles.mapContainer}>
             <View style={styles.mapPlaceholder}>
-              <Text style={styles.mapPlaceholderText}>Map View Here</Text>
+              <FAIcon name={Icon.mapMarker} size={50} color={colors.primary} />
+              <Text style={styles.mapPlaceholderText}>
+                Live Location Tracking
+              </Text>
             </View>
             <View style={styles.mapDirections}>
               <Text style={styles.directionText}>North: 9th St</Text>
@@ -118,6 +147,12 @@ export default function DeliveryScreen() {
           </View>
         </View>
       </ScrollView>
+
+      {/* Delivery Status Bar */}
+      <View style={styles.statusBarBottom}>
+        <FAIcon name={Icon.checkCircle} size={24} color={colors.primary} />
+        <Text style={styles.statusText}>Order is being prepared</Text>
+      </View>
     </View>
   );
 }
@@ -134,8 +169,9 @@ const styles = StyleSheet.create({
   },
   time: {
     fontSize: 16,
-    fontFamily: typography.fontFamily,
+    fontFamily: "System",
     color: colors.black,
+    fontWeight: "600",
   },
   header: {
     paddingHorizontal: 20,
@@ -143,7 +179,8 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 28,
-    fontFamily: typography.fontFamilyBold,
+    fontFamily: "System",
+    fontWeight: "bold",
     color: colors.darkBrown,
   },
   deliveryType: {
@@ -154,12 +191,15 @@ const styles = StyleSheet.create({
   },
   typeButton: {
     flex: 1,
-    paddingVertical: 12,
-    borderRadius: 25,
+    paddingVertical: 15,
+    borderRadius: 15,
     backgroundColor: colors.white,
     alignItems: "center",
     borderWidth: 2,
     borderColor: colors.lightGray,
+    flexDirection: "row",
+    justifyContent: "center",
+    gap: 10,
   },
   typeButtonActive: {
     backgroundColor: colors.primary,
@@ -167,27 +207,42 @@ const styles = StyleSheet.create({
   },
   typeText: {
     fontSize: 16,
-    fontFamily: typography.fontFamilySemiBold,
+    fontFamily: "System",
+    fontWeight: "600",
     color: colors.textDark,
   },
   typeTextActive: {
     color: colors.white,
   },
   deliveryInfo: {
-    paddingHorizontal: 20,
+    backgroundColor: colors.white,
+    marginHorizontal: 20,
+    borderRadius: 20,
+    padding: 25,
+    alignItems: "center",
     marginBottom: 30,
+    shadowColor: colors.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  infoIcon: {
+    marginBottom: 15,
   },
   infoTitle: {
     fontSize: 20,
-    fontFamily: typography.fontFamilyBold,
+    fontFamily: "System",
+    fontWeight: "bold",
     color: colors.darkBrown,
     marginBottom: 10,
+    textAlign: "center",
   },
   infoSubtitle: {
     fontSize: 14,
-    fontFamily: typography.fontFamily,
     color: colors.textLight,
     lineHeight: 20,
+    textAlign: "center",
   },
   courierCard: {
     backgroundColor: colors.white,
@@ -195,6 +250,10 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 20,
     marginBottom: 30,
+    shadowColor: colors.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
     elevation: 3,
   },
   courierInfo: {
@@ -213,59 +272,59 @@ const styles = StyleSheet.create({
   },
   courierName: {
     fontSize: 18,
-    fontFamily: typography.fontFamilyBold,
+    fontFamily: "System",
+    fontWeight: "bold",
     color: colors.darkBrown,
     marginBottom: 5,
   },
   courierRole: {
     fontSize: 14,
-    fontFamily: typography.fontFamily,
     color: colors.textLight,
   },
   timeRemaining: {
     alignItems: "center",
   },
+  timeContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    marginBottom: 10,
+  },
   timeText: {
     fontSize: 24,
-    fontFamily: typography.fontFamilyBold,
+    fontFamily: "System",
+    fontWeight: "bold",
     color: colors.primary,
-    marginBottom: 10,
   },
   deliveryAddress: {
     fontSize: 14,
-    fontFamily: typography.fontFamily,
     color: colors.textLight,
-  },
-  deliveryStatus: {
-    paddingHorizontal: 20,
-    marginBottom: 30,
-  },
-  statusTitle: {
-    fontSize: 20,
-    fontFamily: typography.fontFamilyBold,
-    color: colors.darkBrown,
-    marginBottom: 10,
-  },
-  statusSubtitle: {
-    fontSize: 14,
-    fontFamily: typography.fontFamily,
-    color: colors.textLight,
-    lineHeight: 20,
+    textAlign: "center",
   },
   mapSection: {
     paddingHorizontal: 20,
     marginBottom: 40,
   },
+  mapHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 15,
+  },
   mapTitle: {
     fontSize: 20,
-    fontFamily: typography.fontFamilyBold,
+    fontFamily: "System",
+    fontWeight: "bold",
     color: colors.darkBrown,
-    marginBottom: 15,
   },
   mapContainer: {
     backgroundColor: colors.white,
     borderRadius: 20,
     overflow: "hidden",
+    shadowColor: colors.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
     elevation: 3,
   },
   mapPlaceholder: {
@@ -276,16 +335,33 @@ const styles = StyleSheet.create({
   },
   mapPlaceholderText: {
     fontSize: 16,
-    fontFamily: typography.fontFamily,
     color: colors.textLight,
+    marginTop: 10,
+    fontFamily: "System",
   },
   mapDirections: {
     padding: 20,
   },
   directionText: {
     fontSize: 14,
-    fontFamily: typography.fontFamily,
     color: colors.textDark,
     marginBottom: 5,
+    fontFamily: "System",
+  },
+  statusBarBottom: {
+    backgroundColor: colors.white,
+    padding: 20,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 10,
+    borderTopWidth: 1,
+    borderTopColor: colors.lightGray,
+  },
+  statusText: {
+    fontSize: 16,
+    color: colors.darkBrown,
+    fontFamily: "System",
+    fontWeight: "600",
   },
 });

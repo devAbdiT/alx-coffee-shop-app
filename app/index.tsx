@@ -1,4 +1,3 @@
-// app/index.tsx
 import React from "react";
 import {
   View,
@@ -8,14 +7,16 @@ import {
   ImageBackground,
   Dimensions,
 } from "react-native";
-import { Link } from "expo-router";
-import { colors, typography } from "../constants/theme";
+import { router } from "expo-router";
+import { colors, typography } from "@/constants/theme";
+import { FAIcon, Icon } from "@/components/Icons";
 
 const { width, height } = Dimensions.get("window");
 
 export default function OnboardingScreen() {
   return (
     <View style={styles.container}>
+      {/* Status Bar Time */}
       <View style={styles.statusBar}>
         <Text style={styles.time}>9:41</Text>
       </View>
@@ -27,19 +28,36 @@ export default function OnboardingScreen() {
       >
         <View style={styles.overlay}>
           <View style={styles.content}>
+            {/* Coffee Icon */}
+            <FAIcon
+              name={Icon.coffee}
+              size={80}
+              color={colors.primary}
+              style={styles.coffeeIcon}
+            />
+
             <Text style={styles.title}>
               Fall in Love with Coffee in Blissful Delight!
             </Text>
+
             <Text style={styles.subtitle}>
               Welcome to our cozy coffee corner, where every cup is a delightful
-              for you.
+              experience for you.
             </Text>
 
-            <Link href="/home" asChild>
-              <TouchableOpacity style={styles.button} activeOpacity={0.8}>
-                <Text style={styles.buttonText}>Get Started</Text>
-              </TouchableOpacity>
-            </Link>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => router.push("/home")}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.buttonText}>Get Started</Text>
+              <FAIcon
+                name={Icon.chevronRight}
+                size={20}
+                color={colors.white}
+                style={styles.buttonIcon}
+              />
+            </TouchableOpacity>
           </View>
         </View>
       </ImageBackground>
@@ -56,11 +74,17 @@ const styles = StyleSheet.create({
     paddingTop: 40,
     paddingHorizontal: 20,
     alignItems: "flex-end",
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 10,
   },
   time: {
     fontSize: 16,
-    fontFamily: typography.fontFamily,
+    fontFamily: "System",
     color: colors.black,
+    fontWeight: "600",
   },
   background: {
     flex: 1,
@@ -78,9 +102,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     maxWidth: 300,
   },
+  coffeeIcon: {
+    marginBottom: 30,
+  },
   title: {
     fontSize: 32,
-    fontFamily: typography.fontFamilyBold,
+    fontFamily: "System",
+    fontWeight: "bold",
     color: colors.darkBrown,
     textAlign: "center",
     marginBottom: 20,
@@ -88,7 +116,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 16,
-    fontFamily: typography.fontFamily,
+    fontFamily: "System",
     color: colors.textLight,
     textAlign: "center",
     marginBottom: 40,
@@ -99,15 +127,22 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     paddingHorizontal: 40,
     borderRadius: 30,
-    elevation: 3,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
     shadowColor: colors.black,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
+    elevation: 3,
   },
   buttonText: {
     color: colors.white,
     fontSize: 18,
-    fontFamily: typography.fontFamilySemiBold,
+    fontFamily: "System",
+    fontWeight: "600",
+  },
+  buttonIcon: {
+    marginTop: 2,
   },
 });

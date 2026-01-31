@@ -1,4 +1,3 @@
-// app/order/index.tsx
 import React from "react";
 import {
   View,
@@ -8,63 +7,51 @@ import {
   StyleSheet,
   Dimensions,
 } from "react-native";
-import { Link } from "expo-router";
-import { colors, typography } from "@/constants/theme";
+import { router } from "expo-router";
+import { colors } from "@/constants/theme";
+import { FAIcon, Icon } from "@/components/Icons";
 
 const { width } = Dimensions.get("window");
-
-interface PaymentRowProps {
-  label: string;
-  value: string;
-  isTotal?: boolean;
-}
-
-const PaymentRow: React.FC<PaymentRowProps> = ({
-  label,
-  value,
-  isTotal = false,
-}) => (
-  <View style={[styles.paymentRow, isTotal && styles.totalRow]}>
-    <Text style={isTotal ? styles.totalLabel : styles.paymentLabel}>
-      {label}
-    </Text>
-    <Text style={isTotal ? styles.totalValue : styles.paymentValue}>
-      {value}
-    </Text>
-  </View>
-);
 
 export default function OrderScreen() {
   return (
     <View style={styles.container}>
+      {/* Status Bar */}
       <View style={styles.statusBar}>
         <Text style={styles.time}>9:41</Text>
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>
+        {/* Header */}
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Order</Text>
         </View>
 
+        {/* Delivery Address */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Delivery Address</Text>
           <View style={styles.addressCard}>
+            <View style={styles.addressHeader}>
+              <FAIcon name={Icon.mapMarker} size={20} color={colors.primary} />
+              <Text style={styles.addressTitle}>Delivery Address</Text>
+            </View>
             <Text style={styles.addressStreet}>Jl. Kpg Sutoyo</Text>
             <Text style={styles.addressDetail}>
               Kpg. Sutoyo No. 620, Biban, Tangunggal.
             </Text>
             <View style={styles.addressActions}>
-              <TouchableOpacity activeOpacity={0.7}>
+              <TouchableOpacity style={styles.actionButton}>
+                <FAIcon name={Icon.edit} size={14} color={colors.primary} />
                 <Text style={styles.actionText}>Edit Address</Text>
               </TouchableOpacity>
-              <Text style={styles.separator}>|</Text>
-              <TouchableOpacity activeOpacity={0.7}>
+              <TouchableOpacity style={styles.actionButton}>
+                <FAIcon name={Icon.plus} size={14} color={colors.primary} />
                 <Text style={styles.actionText}>Add Note</Text>
               </TouchableOpacity>
             </View>
           </View>
         </View>
 
+        {/* Order Items */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Order Items</Text>
           <View style={styles.orderItem}>
@@ -76,26 +63,51 @@ export default function OrderScreen() {
           </View>
         </View>
 
+        {/* Payment Summary */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Payment Summary</Text>
-          <PaymentRow label="Price" value="$4.53" />
-          <PaymentRow label="Delivery Fee" value="$1.00" />
-          <PaymentRow label="Total" value="$5.53" isTotal />
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Payment Method</Text>
-          <View style={styles.paymentMethod}>
-            <Text style={styles.methodText}>Cash/Wallet</Text>
-            <Text style={styles.methodAmount}>$5.58</Text>
+          <View style={styles.paymentRow}>
+            <Text style={styles.paymentLabel}>Price</Text>
+            <Text style={styles.paymentValue}>$4.53</Text>
+          </View>
+          <View style={styles.paymentRow}>
+            <Text style={styles.paymentLabel}>Delivery Fee</Text>
+            <Text style={styles.paymentValue}>$1.00</Text>
+          </View>
+          <View style={[styles.paymentRow, styles.totalRow]}>
+            <Text style={styles.totalLabel}>Total</Text>
+            <Text style={styles.totalValue}>$5.53</Text>
           </View>
         </View>
 
-        <Link href="/delivery" asChild>
-          <TouchableOpacity style={styles.orderButton} activeOpacity={0.8}>
-            <Text style={styles.orderButtonText}>Order</Text>
-          </TouchableOpacity>
-        </Link>
+        {/* Payment Method */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Payment Method</Text>
+          <View style={styles.paymentMethod}>
+            <View style={styles.methodLeft}>
+              <FAIcon name={Icon.creditCard} size={20} color={colors.primary} />
+              <Text style={styles.methodText}>Cash/Wallet</Text>
+            </View>
+            <View style={styles.methodRight}>
+              <Text style={styles.methodAmount}>$5.58</Text>
+              <FAIcon
+                name={Icon.chevronRight}
+                size={20}
+                color={colors.textLight}
+              />
+            </View>
+          </View>
+        </View>
+
+        {/* Order Button */}
+        <TouchableOpacity
+          style={styles.orderButton}
+          onPress={() => router.push("/delivery")}
+          activeOpacity={0.8}
+        >
+          <Text style={styles.orderButtonText}>Order Now</Text>
+          <FAIcon name={Icon.chevronRight} size={20} color={colors.white} />
+        </TouchableOpacity>
       </ScrollView>
     </View>
   );
@@ -113,8 +125,9 @@ const styles = StyleSheet.create({
   },
   time: {
     fontSize: 16,
-    fontFamily: typography.fontFamily,
+    fontFamily: "System",
     color: colors.black,
+    fontWeight: "600",
   },
   header: {
     paddingHorizontal: 20,
@@ -122,16 +135,18 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 28,
-    fontFamily: typography.fontFamilyBold,
+    fontFamily: "System",
+    fontWeight: "bold",
     color: colors.darkBrown,
   },
   section: {
     paddingHorizontal: 20,
-    marginBottom: 30,
+    marginBottom: 25,
   },
   sectionTitle: {
     fontSize: 18,
-    fontFamily: typography.fontFamilyBold,
+    fontFamily: "System",
+    fontWeight: "bold",
     color: colors.darkBrown,
     marginBottom: 15,
   },
@@ -139,33 +154,51 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderRadius: 15,
     padding: 20,
+    shadowColor: colors.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
     elevation: 2,
+  },
+  addressHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    marginBottom: 15,
+  },
+  addressTitle: {
+    fontSize: 16,
+    fontFamily: "System",
+    fontWeight: "600",
+    color: colors.darkBrown,
   },
   addressStreet: {
     fontSize: 16,
-    fontFamily: typography.fontFamilyBold,
+    fontFamily: "System",
+    fontWeight: "bold",
     color: colors.darkBrown,
     marginBottom: 5,
   },
   addressDetail: {
     fontSize: 14,
-    fontFamily: typography.fontFamily,
     color: colors.textLight,
-    marginBottom: 15,
+    marginBottom: 20,
     lineHeight: 20,
   },
   addressActions: {
     flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  actionButton: {
+    flexDirection: "row",
     alignItems: "center",
-    gap: 10,
+    gap: 8,
   },
   actionText: {
     fontSize: 14,
-    fontFamily: typography.fontFamilySemiBold,
     color: colors.primary,
-  },
-  separator: {
-    color: colors.lightGray,
+    fontFamily: "System",
+    fontWeight: "600",
   },
   orderItem: {
     backgroundColor: colors.white,
@@ -174,24 +207,30 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    shadowColor: colors.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
   itemInfo: {
     flex: 1,
   },
   itemName: {
     fontSize: 16,
-    fontFamily: typography.fontFamilyBold,
+    fontFamily: "System",
+    fontWeight: "bold",
     color: colors.darkBrown,
     marginBottom: 5,
   },
   itemOption: {
     fontSize: 14,
-    fontFamily: typography.fontFamily,
     color: colors.textLight,
   },
   itemPrice: {
     fontSize: 18,
-    fontFamily: typography.fontFamilyBold,
+    fontFamily: "System",
+    fontWeight: "bold",
     color: colors.primary,
   },
   paymentRow: {
@@ -204,13 +243,13 @@ const styles = StyleSheet.create({
   },
   paymentLabel: {
     fontSize: 16,
-    fontFamily: typography.fontFamily,
     color: colors.textDark,
+    fontFamily: "System",
   },
   paymentValue: {
     fontSize: 16,
-    fontFamily: typography.fontFamily,
     color: colors.textDark,
+    fontFamily: "System",
   },
   totalRow: {
     borderBottomWidth: 0,
@@ -218,12 +257,14 @@ const styles = StyleSheet.create({
   },
   totalLabel: {
     fontSize: 18,
-    fontFamily: typography.fontFamilyBold,
+    fontFamily: "System",
+    fontWeight: "bold",
     color: colors.darkBrown,
   },
   totalValue: {
     fontSize: 24,
-    fontFamily: typography.fontFamilyBold,
+    fontFamily: "System",
+    fontWeight: "bold",
     color: colors.primary,
   },
   paymentMethod: {
@@ -233,15 +274,31 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    shadowColor: colors.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  methodLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
   },
   methodText: {
     fontSize: 16,
-    fontFamily: typography.fontFamily,
     color: colors.textDark,
+    fontFamily: "System",
+  },
+  methodRight: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
   },
   methodAmount: {
     fontSize: 18,
-    fontFamily: typography.fontFamilyBold,
+    fontFamily: "System",
+    fontWeight: "bold",
     color: colors.primary,
   },
   orderButton: {
@@ -250,12 +307,20 @@ const styles = StyleSheet.create({
     marginVertical: 30,
     paddingVertical: 18,
     borderRadius: 30,
+    flexDirection: "row",
+    justifyContent: "center",
     alignItems: "center",
+    gap: 10,
+    shadowColor: colors.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
     elevation: 3,
   },
   orderButtonText: {
     color: colors.white,
     fontSize: 18,
-    fontFamily: typography.fontFamilySemiBold,
+    fontFamily: "System",
+    fontWeight: "600",
   },
 });
