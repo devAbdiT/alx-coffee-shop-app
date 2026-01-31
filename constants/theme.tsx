@@ -9,6 +9,7 @@ export interface ColorPalette {
   black: string;
   textDark: string;
   textLight: string;
+  brown: string;
 }
 
 export interface Typography {
@@ -27,6 +28,7 @@ export const colors: ColorPalette = {
   black: "#000000",
   textDark: "#333333",
   textLight: "#666666",
+  brown: "#C67C4E",
 };
 
 export const typography: Typography = {
