@@ -21,7 +21,7 @@ const coffeeData = [
     fullPrice: "$4.83 ($2.30)",
     description:
       "A cappuccino is an approximately 150 ml (5 oz) beverage, with 25 ml of espresso coffee and 85 ml of fresh milk tea.",
-    image: require("@/assets/images/mocha.jpg"),
+    image: require("@/assets/images/mocha.png"),
     price: 4.53,
   },
   {
@@ -37,7 +37,7 @@ const coffeeData = [
     name: "Cappuccino",
     fullPrice: "$4.50 ($2.10)",
     description: "Perfect balance of espresso, steamed milk, and foam.",
-    image: require("@/assets/images/cappuccino.jpg"),
+    image: require("@/assets/images/cappuccino.png"),
     price: 4.2,
   },
 ];

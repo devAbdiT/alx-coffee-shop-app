@@ -30,7 +30,7 @@ const coffeeItems: CoffeeItem[] = [
     description: "Cafe Mocha with Deep Foam and Espresso",
     originalPrice: "$4.53",
     discountedPrice: "$3.53",
-    image: require("@/assets/images/mocha.jpg"),
+    image: require("@/assets/images/mocha.png"),
   },
   {
     id: 2,
@@ -46,7 +46,7 @@ const coffeeItems: CoffeeItem[] = [
     description: "Perfect blend of espresso and steamed milk",
     originalPrice: "$4.20",
     discountedPrice: "$3.75",
-    image: require("@/assets/images/cappuccino.jpg"),
+    image: require("@/assets/images/cappuccino.png"),
   },
 ];
 
