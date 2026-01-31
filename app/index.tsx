@@ -9,7 +9,7 @@ import {
   Dimensions,
 } from "react-native";
 import { Link } from "expo-router";
-import { colors, typography } from "@/constants/theme";
+import { colors, typography } from "../constants/theme";
 
 const { width, height } = Dimensions.get("window");
 
@@ -21,7 +21,7 @@ export default function OnboardingScreen() {
       </View>
 
       <ImageBackground
-        source={require("@/assets/images/coffee-background.jpg")}
+        source={require("@/assets/images/coffee-background.png")}
         style={styles.background}
         resizeMode="cover"
       >
