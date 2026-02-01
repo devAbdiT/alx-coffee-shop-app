@@ -46,6 +46,16 @@ const coffeeData = [
     image: require("@/assets/images/cappuccino.png"),
     price: 4.2,
   },
+  {
+    id: 4,
+    name: "Latte",
+    subtitle: "Smooth milk",
+    rating: 4.6,
+    reviews: 190,
+    description: "Creamy espresso with steamed milk and light foam.",
+    image: require("@/assets/images/latte.png"), // Using espresso image as placeholder
+    price: 3.8,
+  },
 ];
 
 const sizes = ["S", "M", "L"];
@@ -67,11 +77,6 @@ export default function DetailScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Status Bar */}
-      <View style={styles.statusBar}>
-        <Text style={styles.time}>9:41</Text>
-      </View>
-
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Header with Back and Favorite */}
         <View style={styles.header}>

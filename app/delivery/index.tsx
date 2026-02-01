@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   View,
   Text,
@@ -13,11 +13,7 @@ import { FAIcon, Icon } from "@/components/Icons";
 
 const { width } = Dimensions.get("window");
 
-type DeliveryType = "delivery" | "pickup";
-
 export default function DeliveryScreen() {
-  const [deliveryType, setDeliveryType] = useState<DeliveryType>("delivery");
-
   return (
     <View style={styles.container}>
       {/* Status Bar */}
@@ -25,134 +21,87 @@ export default function DeliveryScreen() {
         <Text style={styles.time}>9:41</Text>
       </View>
 
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Header */}
-        <View style={styles.header}>
-          <Text style={styles.headerTitle}>Delivery</Text>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContent}
+      >
+        {/* Map Section - SIMPLIFIED */}
+        <View style={styles.mapSection}>
+          {/* Street Names */}
+          <View style={styles.streetsContainer}>
+            <View style={styles.streetColumn}>
+              <Text style={styles.streetText}>97th St</Text>
+              <Text style={styles.streetText}>96th St</Text>
+              <Text style={styles.streetText}>95th St</Text>
+              <Text style={styles.streetText}>86th Street</Text>
+            </View>
+
+            <View style={styles.mapCenter}>
+              {/* Vertical Line for Road */}
+              <View style={styles.roadLine} />
+
+              {/* Location Marker */}
+              <View style={styles.locationMarker}>
+                <FAIcon name={Icon.mapMarker} size={30} color={colors.brown} />
+                <View style={styles.markerPulse} />
+              </View>
+            </View>
+
+            <View style={styles.streetColumn}>
+              <Text style={[styles.streetText, styles.rightAlign]}>rd St</Text>
+              <Text style={[styles.streetText, styles.rightAlign]}>Lin</Text>
+              <Text style={[styles.streetText, styles.rightAlign]}>
+                Nirmala Girls HSS
+              </Text>
+              <Text style={[styles.streetText, styles.rightAlign]}>
+                81st Avenue
+              </Text>
+              <Text style={[styles.streetText, styles.rightAlign]}>
+                1st Ave
+              </Text>
+              <Text style={[styles.streetText, styles.rightAlign]}>
+                3rd Ave
+              </Text>
+              <Text style={[styles.streetText, styles.rightAlign]}>
+                Brooklyn Seminary
+              </Text>
+            </View>
+          </View>
         </View>
 
-        {/* Delivery Type */}
-        <View style={styles.deliveryType}>
-          <TouchableOpacity
-            style={[
-              styles.typeButton,
-              deliveryType === "delivery" && styles.typeButtonActive,
-            ]}
-            onPress={() => setDeliveryType("delivery")}
-            activeOpacity={0.8}
-          >
-            <FAIcon
-              name={Icon.truck}
-              size={20}
-              color={
-                deliveryType === "delivery" ? colors.white : colors.textDark
-              }
-            />
-            <Text
-              style={[
-                styles.typeText,
-                deliveryType === "delivery" && styles.typeTextActive,
-              ]}
-            >
-              Delivery
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.typeButton,
-              deliveryType === "pickup" && styles.typeButtonActive,
-            ]}
-            onPress={() => setDeliveryType("pickup")}
-            activeOpacity={0.8}
-          >
-            <FAIcon
-              name={Icon.shoppingCart}
-              size={20}
-              color={deliveryType === "pickup" ? colors.white : colors.textDark}
-            />
-            <Text
-              style={[
-                styles.typeText,
-                deliveryType === "pickup" && styles.typeTextActive,
-              ]}
-            >
-              Pick Up
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* Delivery Info */}
-        <View style={styles.deliveryInfo}>
-          <FAIcon
-            name={Icon.truck}
-            size={40}
-            color={colors.primary}
-            style={styles.infoIcon}
-          />
-          <Text style={styles.infoTitle}>Deliver your order</Text>
-          <Text style={styles.infoSubtitle}>
-            We will deliver your goods to you in the shortest possible time.
-          </Text>
-        </View>
-
-        {/* Courier Card */}
-        <View style={styles.courierCard}>
-          <View style={styles.courierInfo}>
-            <Image
-              source={{
-                uri: "https://images.unsplash.com/photo-1494790108755-2616b786d4d9",
-              }}
-              style={styles.courierAvatar}
-            />
-            <View style={styles.courierDetails}>
+        {/* Courier Info - SIMPLIFIED */}
+        <View style={styles.courierSection}>
+          <View style={styles.courierCard}>
+            <View style={styles.courierHeader}>
               <Text style={styles.courierName}>Brooklyn Simmons</Text>
               <Text style={styles.courierRole}>Personal Courier</Text>
             </View>
-            <TouchableOpacity>
-              <FAIcon name={Icon.phone} size={24} color={colors.primary} />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.timeRemaining}>
-            <View style={styles.timeContainer}>
-              <FAIcon name={Icon.clock} size={20} color={colors.primary} />
-              <Text style={styles.timeText}>10 minutes left</Text>
+
+            <View style={styles.deliveryInfo}>
+              <Text style={styles.timeLeft}>10 minutes left</Text>
+              <Text style={styles.deliveryAddress}>
+                Delivery to Jl Kpg Sutoyo
+              </Text>
             </View>
-            <Text style={styles.deliveryAddress}>
-              Delivery to Jl. Kpg Sutoyo
+          </View>
+        </View>
+
+        {/* Delivery Message */}
+        <View style={styles.messageSection}>
+          <View style={styles.messageCard}>
+            <Text style={styles.messageTitle}>Delivered your order</Text>
+            <Text style={styles.messageText}>
+              We will deliver your goods to you in the shortest possible time.
             </Text>
           </View>
         </View>
 
-        {/* Map Section */}
-        <View style={styles.mapSection}>
-          <View style={styles.mapHeader}>
-            <Text style={styles.mapTitle}>Map</Text>
-            <TouchableOpacity>
-              <FAIcon name={Icon.info} size={20} color={colors.textLight} />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.mapContainer}>
-            <View style={styles.mapPlaceholder}>
-              <FAIcon name={Icon.mapMarker} size={50} color={colors.primary} />
-              <Text style={styles.mapPlaceholderText}>
-                Live Location Tracking
-              </Text>
-            </View>
-            <View style={styles.mapDirections}>
-              <Text style={styles.directionText}>North: 9th St</Text>
-              <Text style={styles.directionText}>South: 7th St</Text>
-              <Text style={styles.directionText}>East: 8th St</Text>
-              <Text style={styles.directionText}>West: 6th St</Text>
-            </View>
-          </View>
+        {/* Bottom Info */}
+        <View style={styles.bottomInfo}>
+          <Text style={styles.bottomName}>Brooklyn Simmons</Text>
+          <Text style={styles.bottomRole}>Personal Courier</Text>
         </View>
       </ScrollView>
-
-      {/* Delivery Status Bar */}
-      <View style={styles.statusBarBottom}>
-        <FAIcon name={Icon.checkCircle} size={24} color={colors.primary} />
-        <Text style={styles.statusText}>Order is being prepared</Text>
-      </View>
     </View>
   );
 }
@@ -164,204 +113,149 @@ const styles = StyleSheet.create({
   },
   statusBar: {
     paddingTop: 40,
-    paddingHorizontal: 20,
+    paddingRight: 20,
     alignItems: "flex-end",
   },
   time: {
     fontSize: 16,
-    fontFamily: "System",
     color: colors.black,
     fontWeight: "600",
+    fontFamily: "Sora-SemiBold",
   },
-  header: {
+  scrollContent: {
+    paddingBottom: 40,
+  },
+  mapSection: {
     paddingHorizontal: 20,
+    marginTop: 20,
+    marginBottom: 30,
+  },
+  streetsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    minHeight: 300,
+  },
+  streetColumn: {
+    justifyContent: "space-around",
     paddingVertical: 20,
   },
-  headerTitle: {
-    fontSize: 28,
-    fontFamily: "System",
-    fontWeight: "bold",
-    color: colors.darkBrown,
-  },
-  deliveryType: {
-    flexDirection: "row",
-    paddingHorizontal: 20,
-    marginBottom: 30,
-    gap: 15,
-  },
-  typeButton: {
-    flex: 1,
-    paddingVertical: 15,
-    borderRadius: 15,
-    backgroundColor: colors.white,
-    alignItems: "center",
-    borderWidth: 2,
-    borderColor: colors.lightGray,
-    flexDirection: "row",
-    justifyContent: "center",
-    gap: 10,
-  },
-  typeButtonActive: {
-    backgroundColor: colors.primary,
-    borderColor: colors.primary,
-  },
-  typeText: {
-    fontSize: 16,
-    fontFamily: "System",
-    fontWeight: "600",
-    color: colors.textDark,
-  },
-  typeTextActive: {
-    color: colors.white,
-  },
-  deliveryInfo: {
-    backgroundColor: colors.white,
-    marginHorizontal: 20,
-    borderRadius: 20,
-    padding: 25,
-    alignItems: "center",
-    marginBottom: 30,
-    shadowColor: colors.black,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  infoIcon: {
-    marginBottom: 15,
-  },
-  infoTitle: {
-    fontSize: 20,
-    fontFamily: "System",
-    fontWeight: "bold",
-    color: colors.darkBrown,
-    marginBottom: 10,
-    textAlign: "center",
-  },
-  infoSubtitle: {
-    fontSize: 14,
+  streetText: {
+    fontSize: 12,
     color: colors.textLight,
-    lineHeight: 20,
-    textAlign: "center",
+    marginVertical: 8,
+    fontFamily: "Sora-Regular",
+  },
+  rightAlign: {
+    textAlign: "right",
+  },
+  mapCenter: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    position: "relative",
+  },
+  roadLine: {
+    position: "absolute",
+    width: 2,
+    height: "100%",
+    backgroundColor: colors.lightGray,
+  },
+  locationMarker: {
+    position: "absolute",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  markerPulse: {
+    position: "absolute",
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: colors.brown,
+    opacity: 0.3,
+  },
+  courierSection: {
+    paddingHorizontal: 20,
+    marginBottom: 20,
   },
   courierCard: {
     backgroundColor: colors.white,
-    marginHorizontal: 20,
     borderRadius: 20,
     padding: 20,
-    marginBottom: 30,
     shadowColor: colors.black,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
   },
-  courierInfo: {
-    flexDirection: "row",
+  courierHeader: {
     alignItems: "center",
     marginBottom: 20,
   },
-  courierAvatar: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    marginRight: 15,
-  },
-  courierDetails: {
-    flex: 1,
-  },
   courierName: {
-    fontSize: 18,
-    fontFamily: "System",
+    fontSize: 20,
     fontWeight: "bold",
     color: colors.darkBrown,
     marginBottom: 5,
+    fontFamily: "Sora-Bold",
   },
   courierRole: {
     fontSize: 14,
     color: colors.textLight,
+    fontFamily: "Sora-Regular",
   },
-  timeRemaining: {
+  deliveryInfo: {
     alignItems: "center",
   },
-  timeContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-    marginBottom: 10,
-  },
-  timeText: {
+  timeLeft: {
     fontSize: 24,
-    fontFamily: "System",
     fontWeight: "bold",
-    color: colors.primary,
+    color: colors.brown,
+    marginBottom: 10,
+    fontFamily: "Sora-Bold",
   },
   deliveryAddress: {
     fontSize: 14,
     color: colors.textLight,
-    textAlign: "center",
+    fontFamily: "Sora-Regular",
   },
-  mapSection: {
+  messageSection: {
     paddingHorizontal: 20,
-    marginBottom: 40,
+    marginBottom: 30,
   },
-  mapHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+  messageCard: {
+    backgroundColor: colors.brown,
+    borderRadius: 20,
+    padding: 25,
     alignItems: "center",
-    marginBottom: 15,
   },
-  mapTitle: {
+  messageTitle: {
     fontSize: 20,
-    fontFamily: "System",
+    fontWeight: "bold",
+    color: colors.white,
+    marginBottom: 10,
+    fontFamily: "Sora-Bold",
+  },
+  messageText: {
+    fontSize: 14,
+    color: colors.secondary,
+    textAlign: "center",
+    lineHeight: 20,
+    fontFamily: "Sora-Regular",
+  },
+  bottomInfo: {
+    alignItems: "center",
+    paddingHorizontal: 20,
+  },
+  bottomName: {
+    fontSize: 18,
     fontWeight: "bold",
     color: colors.darkBrown,
-  },
-  mapContainer: {
-    backgroundColor: colors.white,
-    borderRadius: 20,
-    overflow: "hidden",
-    shadowColor: colors.black,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  mapPlaceholder: {
-    height: 200,
-    backgroundColor: colors.lightGray,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  mapPlaceholderText: {
-    fontSize: 16,
-    color: colors.textLight,
-    marginTop: 10,
-    fontFamily: "System",
-  },
-  mapDirections: {
-    padding: 20,
-  },
-  directionText: {
-    fontSize: 14,
-    color: colors.textDark,
     marginBottom: 5,
-    fontFamily: "System",
+    fontFamily: "Sora-Bold",
   },
-  statusBarBottom: {
-    backgroundColor: colors.white,
-    padding: 20,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 10,
-    borderTopWidth: 1,
-    borderTopColor: colors.lightGray,
-  },
-  statusText: {
-    fontSize: 16,
-    color: colors.darkBrown,
-    fontFamily: "System",
-    fontWeight: "600",
+  bottomRole: {
+    fontSize: 14,
+    color: colors.textLight,
+    fontFamily: "Sora-Regular",
   },
 });
