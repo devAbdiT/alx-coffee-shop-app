@@ -1,50 +1,148 @@
-# Welcome to your Expo app 👋
+I think u know the project very well so i want u to write me README file
+☕ ALX Coffee Shop App
+A beautiful, fully-functional coffee shop mobile application built with React Native, TypeScript, and Expo Router. The app features a complete coffee ordering experience from discovery to delivery.
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+https://images.unsplash.com/photo-1495474472287-4d71bcdd2085
 
-## Get started
+📱 App Features
+Onboarding Screen - Welcome screen with beautiful coffee imagery
 
-1. Install dependencies
+Home Screen - Discover coffee with search, categories, and favorites
 
-   ```bash
-   npm install
-   ```
+Detail Screen - View coffee details, select sizes, and add to order
 
-2. Start the app
+Order Screen - Review order, select payment method, and checkout
 
-   ```bash
-   npx expo start
-   ```
+Delivery Screen - Track order with live map and courier info
 
-In the output, you'll find options to open the app in a
+🎨 Design System
+Color Palette
+Color Hex Usage
+Primary #C67CAE Buttons, active states
+Secondary #EDD6C8 Backgrounds, highlights
+Dark Brown #513131 Text, titles
+Light Gray #E3E5E3 Borders, dividers
+Cream #F9F2ED Main background
+Typography
+Font Family: Sora (Regular, SemiBold, Bold)
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+Font Sizes: 14px - 32px with responsive scaling
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+🚀 Tech Stack
+React Native (0.71.8) - Mobile framework
 
-## Get a fresh project
+TypeScript - Type safety
 
-When you're ready, run:
+Expo Router - File-based navigation
 
-```bash
-npm run reset-project
-```
+FontAwesome - Icon library
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+React Native SVG - Custom icons
 
-## Learn more
+📁 Project Structure
+text
+alx-coffee-shop-app/
+├── app/ # Expo Router file-based routing
+│ ├── index.tsx # Onboarding screen
+│ ├── home/index.tsx # Home screen
+│ ├── detail/[id].tsx # Detail screen
+│ ├── order/index.tsx # Order screen
+│ └── delivery/index.tsx # Delivery screen
+├── components/
+│ └── Icons.tsx # Icon components (FontAwesome)
+├── constants/
+│ └── theme.ts # Colors & typography
+├── types/
+│ └── index.ts # TypeScript interfaces
+├── assets/
+│ └── images/ # App images
+└── package.json
+🛠️ Installation
+Clone the repository
 
-To learn more about developing your project with Expo, look at the following resources:
+bash
+git clone <repository-url>
+cd alx-coffee-shop-app
+Install dependencies
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+bash
+npm install
 
-## Join the community
+# or
 
-Join our community of developers creating universal apps.
+yarn install
+Install FontAwesome
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+bash
+npm install @fortawesome/fontawesome-svg-core @fortawesome/free-solid-svg-icons @fortawesome/react-native-fontawesome
+Install React Native SVG
+
+bash
+npx expo install react-native-svg
+Run the app
+
+bash
+npx expo start
+📱 Running the App
+bash
+
+# Start development server
+
+npx expo start
+
+# Run on specific platform
+
+npx expo start --ios
+npx expo start --android
+npx expo start --web
+
+# Clear cache if needed
+
+npx expo start --clear
+🧭 Navigation Flow
+
+Onboarding → Home → Detail → Order → Delivery
+↓ ↓ ↓ ↓ ↓
+Get Started → Coffee → Size → Payment → Track
+List Select Summary Order
+🎯 Key Features Implementation
+
+1. Responsive Layout
+   Flexbox-based responsive design
+
+Percentage-based heights (65%/35% splits)
+
+Fixed width buttons (327px) with hug content height
+
+2. State Management
+   Local state with React useState
+
+Favorite toggling functionality
+
+Category selection
+
+Search filtering
+
+3. Navigation
+   Expo Router for file-based navigation
+
+Type-safe navigation with TypeScript
+
+Dynamic routes (/detail/[id])
+
+4. UI Components
+   Custom button component (327×56px)
+
+Coffee cards with favorite toggle
+
+Category chips with active states
+
+Search bar with icons
+
+📸 Screens
+Screen Description
+Onboarding Welcome screen with "Get Started" button
+Home Coffee discovery with search & categories
+Detail Coffee details with size selection
+Order Order summary & payment
+Delivery Order tracking with map
