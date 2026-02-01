@@ -1,3 +1,4 @@
+// app/home/index.tsx - UPDATED TO MATCH SCREENSHOT
 import React, { useState } from "react";
 import {
   View,
@@ -7,6 +8,7 @@ import {
   StyleSheet,
   Image,
   Dimensions,
+  TextInput,
 } from "react-native";
 import { router } from "expo-router";
 import { colors } from "@/constants/theme";
@@ -14,146 +16,154 @@ import { FAIcon, Icon } from "@/components/Icons";
 
 const { width } = Dimensions.get("window");
 
-interface CoffeeItem {
-  id: number;
-  name: string;
-  description: string;
-  originalPrice: string;
-  discountedPrice: string;
-  image: any;
-  rating: number;
-}
-
-const coffeeItems: CoffeeItem[] = [
+const coffeeItems = [
   {
     id: 1,
-    name: "Caffè Mocha",
-    description: "Cafe Mocha with Deep Foam and Espresso",
-    originalPrice: "$4.53",
-    discountedPrice: "$3.53",
-    image: {
-      uri: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd",
-    },
+    name: "Caffe Mocha",
+    description: "Deep Foam",
+    price: "$4.53",
+    image: require("@/assets/images/mocha.png"),
     rating: 4.8,
   },
   {
     id: 2,
-    name: "Espresso",
-    description: "Strong and rich espresso shot",
-    originalPrice: "$3.50",
-    discountedPrice: "$2.99",
-    image: {
-      uri: "https://images.unsplash.com/photo-1510707577719-ae7c9b788690",
-    },
+    name: "Flat White",
+    description: "Espresso",
+    price: "$3.53",
+    image: require("@/assets/images/espresso.jpg"),
     rating: 4.5,
   },
   {
     id: 3,
     name: "Cappuccino",
-    description: "Perfect blend of espresso and steamed milk",
-    originalPrice: "$4.20",
-    discountedPrice: "$3.75",
-    image: {
-      uri: "https://images.unsplash.com/photo-1572442388796-11668a67e53d",
-    },
+    description: "Perfect blend",
+    price: "$4.20",
+    image: require("@/assets/images/cappuccino.png"),
     rating: 4.7,
   },
 ];
 
-export default function HomeScreen() {
-  const [favorites, setFavorites] = useState<number[]>([]);
+const categories = ["All Coffee", "Machiatto", "Latte", "Americano"];
 
-  const toggleFavorite = (id: number) => {
-    setFavorites((prev) =>
-      prev.includes(id) ? prev.filter((favId) => favId !== id) : [...prev, id],
-    );
-  };
+export default function HomeScreen() {
+  const [selectedCategory, setSelectedCategory] = useState(0);
+  const [searchText, setSearchText] = useState("");
 
   return (
     <View style={styles.container}>
-      {/* Status Bar */}
-      <View style={styles.statusBar}>
-        <Text style={styles.time}>9:41</Text>
-      </View>
-
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View style={styles.header}>
           <View style={styles.headerTop}>
             <View>
-              <Text style={styles.greeting}>Good morning! ☀️</Text>
-              <Text style={styles.title}>Discover</Text>
-            </View>
-            <View style={styles.headerIcons}>
-              <TouchableOpacity style={styles.iconButton}>
-                <FAIcon name={Icon.search} size={24} color={colors.darkBrown} />
-              </TouchableOpacity>
-              <TouchableOpacity style={[styles.iconButton, styles.cartButton]}>
+              <Text style={styles.locationLabel}>Location</Text>
+              <View style={styles.locationContainer}>
                 <FAIcon
-                  name={Icon.shoppingCart}
-                  size={24}
-                  color={colors.darkBrown}
+                  name={Icon.mapMarker}
+                  size={16}
+                  color={colors.textLight}
                 />
-                <View style={styles.cartBadge}>
-                  <Text style={styles.cartBadgeText}>2</Text>
-                </View>
-              </TouchableOpacity>
+                <Text style={styles.locationText}>Bilzen, Tanjungbalai</Text>
+                <FAIcon
+                  name={Icon.chevronRight}
+                  size={16}
+                  color={colors.textLight}
+                  style={styles.locationChevron}
+                />
+              </View>
+            </View>
+            <TouchableOpacity style={styles.avatarButton}>
+              <FAIcon name={Icon.user} size={24} color={colors.white} />
+            </TouchableOpacity>
+          </View>
+
+          {/* Search Bar */}
+          <View style={styles.searchContainer}>
+            <FAIcon name={Icon.search} size={20} color={colors.textLight} />
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Search coffee"
+              placeholderTextColor={colors.textLight}
+              value={searchText}
+              onChangeText={setSearchText}
+            />
+          </View>
+
+          {/* Promo Banner - Updated to match screenshot */}
+          <View style={styles.promoBanner}>
+            <View style={styles.promoContent}>
+              <Text style={styles.promoTitle}>Promo</Text>
+              <Text style={styles.promoText}>Buy one get</Text>
+              <Text style={styles.promoText}>one FREE</Text>
+            </View>
+            <View style={styles.promoImageContainer}>
+              {/* This would be your promo image - using a placeholder for now */}
+              <View style={styles.promoImagePlaceholder}>
+                <Text style={styles.promoImageText}>Promo</Text>
+              </View>
             </View>
           </View>
-          <Text style={styles.subtitle}>
-            What would you like to drink today?
-          </Text>
+
+          {/* Categories */}
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            style={styles.categoriesScroll}
+          >
+            {categories.map((category, index) => (
+              <TouchableOpacity
+                key={index}
+                style={[
+                  styles.categoryButton,
+                  selectedCategory === index && styles.categoryButtonActive,
+                ]}
+                onPress={() => setSelectedCategory(index)}
+                activeOpacity={0.8}
+              >
+                <Text
+                  style={[
+                    styles.categoryText,
+                    selectedCategory === index && styles.categoryTextActive,
+                  ]}
+                >
+                  {category}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
         </View>
 
         {/* Coffee List */}
         <View style={styles.coffeeList}>
-          {coffeeItems.map((item) => {
-            const isFavorite = favorites.includes(item.id);
+          {coffeeItems.map((item) => (
+            <TouchableOpacity
+              key={item.id}
+              style={styles.coffeeCard}
+              onPress={() => router.push(`/detail/${item.id}`)}
+              activeOpacity={0.8}
+            >
+              {/* Coffee Image - Circular on LEFT */}
+              <Image source={item.image} style={styles.coffeeImage} />
 
-            return (
-              <TouchableOpacity
-                key={item.id}
-                style={styles.coffeeCard}
-                onPress={() => router.push(`/detail/${item.id}`)}
-                activeOpacity={0.8}
-              >
-                <Image source={item.image} style={styles.coffeeImage} />
+              {/* Coffee Info on RIGHT */}
+              <View style={styles.coffeeInfo}>
+                <Text style={styles.coffeeName}>{item.name}</Text>
+                <Text style={styles.coffeeDescription}>{item.description}</Text>
 
-                <TouchableOpacity
-                  style={styles.favoriteButton}
-                  onPress={() => toggleFavorite(item.id)}
-                  activeOpacity={0.7}
-                >
-                  <FAIcon
-                    name={Icon.heart}
-                    size={20}
-                    color={isFavorite ? colors.primary : colors.textLight}
-                  />
-                </TouchableOpacity>
-
-                <View style={styles.coffeeInfo}>
-                  <Text style={styles.coffeeName}>{item.name}</Text>
-                  <Text style={styles.coffeeDescription}>
-                    {item.description}
-                  </Text>
-
-                  <View style={styles.ratingContainer}>
-                    <FAIcon name={Icon.star} size={16} color="#FFD700" />
-                    <Text style={styles.ratingText}>{item.rating}</Text>
-                  </View>
-
-                  <View style={styles.priceContainer}>
-                    <Text style={styles.discountedPrice}>
-                      {item.discountedPrice}
-                    </Text>
-                    <Text style={styles.originalPrice}>
-                      {item.originalPrice}
-                    </Text>
-                  </View>
+                <View style={styles.ratingContainer}>
+                  <FAIcon name={Icon.star} size={16} color="#FFD700" />
+                  <Text style={styles.ratingText}>{item.rating}</Text>
                 </View>
-              </TouchableOpacity>
-            );
-          })}
+
+                <View style={styles.priceRow}>
+                  <Text style={styles.coffeePrice}>{item.price}</Text>
+                  <TouchableOpacity style={styles.addButton}>
+                    <FAIcon name={Icon.plus} size={20} color={colors.white} />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </TouchableOpacity>
+          ))}
         </View>
       </ScrollView>
     </View>
@@ -165,69 +175,136 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.cream,
   },
-  statusBar: {
-    paddingTop: 40,
-    paddingHorizontal: 20,
-    alignItems: "flex-end",
-  },
-  time: {
-    fontSize: 16,
-    fontFamily: "System",
-    color: colors.black,
-    fontWeight: "600",
-  },
   header: {
     paddingHorizontal: 20,
-    paddingVertical: 20,
+    paddingTop: 60,
+    paddingBottom: 20,
   },
   headerTop: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 10,
+    marginBottom: 20,
   },
-  greeting: {
-    fontSize: 16,
+  locationLabel: {
+    fontSize: 14,
     color: colors.textLight,
-    fontFamily: "System",
+    marginBottom: 4,
+    fontFamily: "Sora-Regular",
   },
-  title: {
-    fontSize: 32,
-    fontFamily: "System",
-    fontWeight: "bold",
-    color: colors.darkBrown,
-  },
-  headerIcons: {
+  locationContainer: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 20,
   },
-  iconButton: {
-    padding: 8,
+  locationText: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: colors.darkBrown,
+    marginLeft: 8,
+    marginRight: 4,
+    fontFamily: "Sora-SemiBold",
   },
-  cartButton: {
-    position: "relative",
+  locationChevron: {
+    marginTop: 2,
   },
-  cartBadge: {
-    position: "absolute",
-    top: 0,
-    right: 0,
-    backgroundColor: colors.primary,
-    borderRadius: 10,
-    width: 20,
-    height: 20,
+  avatarButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: colors.brown,
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: colors.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  searchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: colors.white,
+    borderRadius: 15,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    marginBottom: 20,
+    shadowColor: colors.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  searchInput: {
+    flex: 1,
+    marginLeft: 12,
+    fontSize: 16,
+    color: colors.textDark,
+    fontFamily: "Sora-Regular",
+  },
+  promoBanner: {
+    backgroundColor: colors.brown,
+    borderRadius: 15,
+    padding: 20,
+    marginBottom: 20,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  promoContent: {
+    flex: 1,
+  },
+  promoTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: colors.white,
+    marginBottom: 4,
+    fontFamily: "Sora-Bold",
+  },
+  promoText: {
+    fontSize: 14,
+    color: colors.secondary,
+    fontFamily: "Sora-Regular",
+  },
+  promoImageContainer: {
+    width: 80,
+    height: 80,
     justifyContent: "center",
     alignItems: "center",
   },
-  cartBadgeText: {
-    color: colors.white,
-    fontSize: 12,
-    fontWeight: "bold",
+  promoImagePlaceholder: {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    backgroundColor: colors.secondary,
+    justifyContent: "center",
+    alignItems: "center",
   },
-  subtitle: {
-    fontSize: 16,
-    color: colors.textLight,
-    fontFamily: "System",
+  promoImageText: {
+    color: colors.brown,
+    fontSize: 12,
+    fontFamily: "Sora-Regular",
+  },
+  categoriesScroll: {
+    marginBottom: 10,
+  },
+  categoryButton: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 20,
+    marginRight: 12,
+    backgroundColor: colors.white,
+  },
+  categoryButtonActive: {
+    backgroundColor: colors.brown,
+  },
+  categoryText: {
+    fontSize: 14,
+    fontWeight: "500",
+    color: colors.textDark,
+    fontFamily: "Sora-SemiBold",
+  },
+  categoryTextActive: {
+    color: colors.white,
   },
   coffeeList: {
     paddingHorizontal: 20,
@@ -237,7 +314,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderRadius: 20,
     marginBottom: 20,
-    overflow: "hidden",
+    padding: 15,
+    flexDirection: "row",
+    alignItems: "center",
     shadowColor: colors.black,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -245,68 +324,57 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   coffeeImage: {
-    width: "100%",
-    height: 200,
+    width: 100,
+    height: 100,
+    borderRadius: 15,
     resizeMode: "cover",
-  },
-  favoriteButton: {
-    position: "absolute",
-    top: 15,
-    right: 15,
-    backgroundColor: colors.white,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: "center",
-    alignItems: "center",
-    shadowColor: colors.black,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    marginRight: 15,
   },
   coffeeInfo: {
-    padding: 20,
+    flex: 1,
   },
   coffeeName: {
-    fontSize: 22,
-    fontFamily: "System",
+    fontSize: 18,
     fontWeight: "bold",
     color: colors.darkBrown,
-    marginBottom: 8,
+    marginBottom: 4,
+    fontFamily: "Sora-Bold",
   },
   coffeeDescription: {
     fontSize: 14,
     color: colors.textLight,
-    marginBottom: 12,
-    fontFamily: "System",
+    marginBottom: 8,
+    fontFamily: "Sora-Regular",
   },
   ratingContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 10,
+    marginBottom: 8,
   },
   ratingText: {
     fontSize: 14,
+    fontWeight: "600",
     color: colors.darkBrown,
     marginLeft: 5,
-    fontWeight: "600",
+    fontFamily: "Sora-SemiBold",
   },
-  priceContainer: {
+  priceRow: {
     flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
   },
-  discountedPrice: {
+  coffeePrice: {
     fontSize: 20,
-    fontFamily: "System",
     fontWeight: "bold",
-    color: colors.primary,
-    marginRight: 10,
+    color: colors.brown,
+    fontFamily: "Sora-Bold",
   },
-  originalPrice: {
-    fontSize: 16,
-    color: colors.textLight,
-    textDecorationLine: "line-through",
-    fontFamily: "System",
+  addButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    backgroundColor: colors.brown,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
