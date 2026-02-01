@@ -1,4 +1,4 @@
-// app/home/index.tsx - UPDATED TO MATCH SCREENSHOT
+// app/home/index.tsx - WITH BOTTOM NAV BAR ADDED
 import React, { useState } from "react";
 import {
   View,
@@ -7,39 +7,41 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
-  Dimensions,
   TextInput,
+  ImageBackground,
 } from "react-native";
 import { router } from "expo-router";
 import { colors } from "@/constants/theme";
 import { FAIcon, Icon } from "@/components/Icons";
-
-const { width } = Dimensions.get("window");
 
 const coffeeItems = [
   {
     id: 1,
     name: "Caffe Mocha",
     description: "Deep Foam",
-    price: "$4.53",
+    price: "$ 4.53",
     image: require("@/assets/images/mocha.png"),
-    rating: 4.8,
   },
   {
     id: 2,
     name: "Flat White",
     description: "Espresso",
-    price: "$3.53",
+    price: "$ 3.53",
     image: require("@/assets/images/espresso.jpg"),
-    rating: 4.5,
   },
   {
     id: 3,
     name: "Cappuccino",
     description: "Perfect blend",
-    price: "$4.20",
+    price: "$ 4.20",
     image: require("@/assets/images/cappuccino.png"),
-    rating: 4.7,
+  },
+  {
+    id: 4,
+    name: "Latte",
+    description: "Smooth milk",
+    price: "$ 3.80",
+    image: require("@/assets/images/latte.png"),
   },
 ];
 
@@ -48,10 +50,14 @@ const categories = ["All Coffee", "Machiatto", "Latte", "Americano"];
 export default function HomeScreen() {
   const [selectedCategory, setSelectedCategory] = useState(0);
   const [searchText, setSearchText] = useState("");
+  const [activeTab, setActiveTab] = useState("home"); // Track active tab
 
   return (
     <View style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={styles.scrollView}
+      >
         {/* Header */}
         <View style={styles.header}>
           <View style={styles.headerTop}>
@@ -89,26 +95,27 @@ export default function HomeScreen() {
             />
           </View>
 
-          {/* Promo Banner - Updated to match screenshot */}
-          <View style={styles.promoBanner}>
+          {/* Promo Banner */}
+          <ImageBackground
+            source={require("@/assets/images/Banner1.png")}
+            style={styles.promoBanner}
+            imageStyle={{ borderRadius: 15 }}
+            resizeMode="cover"
+          >
             <View style={styles.promoContent}>
               <Text style={styles.promoTitle}>Promo</Text>
-              <Text style={styles.promoText}>Buy one get</Text>
-              <Text style={styles.promoText}>one FREE</Text>
+              <Text style={styles.promoText}>Buy one get one FREE</Text>
             </View>
-            <View style={styles.promoImageContainer}>
-              {/* This would be your promo image - using a placeholder for now */}
-              <View style={styles.promoImagePlaceholder}>
-                <Text style={styles.promoImageText}>Promo</Text>
-              </View>
-            </View>
-          </View>
+          </ImageBackground>
+        </View>
 
-          {/* Categories */}
+        {/* Categories */}
+        <View style={styles.categories}>
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
             style={styles.categoriesScroll}
+            contentContainerStyle={styles.categoriesContent}
           >
             {categories.map((category, index) => (
               <TouchableOpacity
@@ -133,8 +140,8 @@ export default function HomeScreen() {
           </ScrollView>
         </View>
 
-        {/* Coffee List */}
-        <View style={styles.coffeeList}>
+        {/* Coffee Grid */}
+        <View style={styles.coffeeGrid}>
           {coffeeItems.map((item) => (
             <TouchableOpacity
               key={item.id}
@@ -142,30 +149,106 @@ export default function HomeScreen() {
               onPress={() => router.push(`/detail/${item.id}`)}
               activeOpacity={0.8}
             >
-              {/* Coffee Image - Circular on LEFT */}
               <Image source={item.image} style={styles.coffeeImage} />
-
-              {/* Coffee Info on RIGHT */}
               <View style={styles.coffeeInfo}>
                 <Text style={styles.coffeeName}>{item.name}</Text>
                 <Text style={styles.coffeeDescription}>{item.description}</Text>
-
-                <View style={styles.ratingContainer}>
-                  <FAIcon name={Icon.star} size={16} color="#FFD700" />
-                  <Text style={styles.ratingText}>{item.rating}</Text>
-                </View>
-
                 <View style={styles.priceRow}>
                   <Text style={styles.coffeePrice}>{item.price}</Text>
                   <TouchableOpacity style={styles.addButton}>
-                    <FAIcon name={Icon.plus} size={20} color={colors.white} />
+                    <FAIcon name={Icon.plus} size={16} color={colors.white} />
                   </TouchableOpacity>
                 </View>
               </View>
             </TouchableOpacity>
           ))}
         </View>
+
+        {/* Add extra padding at bottom for the tab bar */}
+        <View style={styles.bottomPadding} />
       </ScrollView>
+
+      {/* Custom Bottom Navigation Bar - ADDED HERE */}
+      <View style={styles.bottomNav}>
+        <TouchableOpacity
+          style={styles.navItem}
+          onPress={() => setActiveTab("home")}
+        >
+          <FAIcon
+            name={Icon.home}
+            size={24}
+            color={activeTab === "home" ? colors.brown : colors.textLight}
+          />
+          <Text
+            style={[
+              styles.navText,
+              activeTab === "home" && styles.navTextActive,
+            ]}
+          >
+            Home
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.navItem}
+          onPress={() => {
+            setActiveTab("order");
+            router.push("/order");
+          }}
+        >
+          <FAIcon
+            name={Icon.shoppingCart}
+            size={24}
+            color={activeTab === "order" ? colors.brown : colors.textLight}
+          />
+          <Text
+            style={[
+              styles.navText,
+              activeTab === "order" && styles.navTextActive,
+            ]}
+          >
+            Order
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.navItem}
+          onPress={() => setActiveTab("favorite")}
+        >
+          <FAIcon
+            name={Icon.heart}
+            size={24}
+            color={activeTab === "favorite" ? colors.brown : colors.textLight}
+          />
+          <Text
+            style={[
+              styles.navText,
+              activeTab === "favorite" && styles.navTextActive,
+            ]}
+          >
+            Favorite
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.navItem}
+          onPress={() => setActiveTab("profile")}
+        >
+          <FAIcon
+            name={Icon.user}
+            size={24}
+            color={activeTab === "profile" ? colors.brown : colors.textLight}
+          />
+          <Text
+            style={[
+              styles.navText,
+              activeTab === "profile" && styles.navTextActive,
+            ]}
+          >
+            Profile
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -175,10 +258,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.cream,
   },
+  scrollView: {
+    flex: 1,
+  },
   header: {
     paddingHorizontal: 20,
     paddingTop: 60,
-    paddingBottom: 20,
+    paddingBottom: 10,
   },
   headerTop: {
     flexDirection: "row",
@@ -242,13 +328,14 @@ const styles = StyleSheet.create({
     fontFamily: "Sora-Regular",
   },
   promoBanner: {
-    backgroundColor: colors.brown,
-    borderRadius: 15,
+    width: "100%",
+    height: 120,
     padding: 20,
     marginBottom: 20,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    overflow: "hidden",
   },
   promoContent: {
     flex: 1,
@@ -265,27 +352,16 @@ const styles = StyleSheet.create({
     color: colors.secondary,
     fontFamily: "Sora-Regular",
   },
-  promoImageContainer: {
-    width: 80,
-    height: 80,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  promoImagePlaceholder: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    backgroundColor: colors.secondary,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  promoImageText: {
-    color: colors.brown,
-    fontSize: 12,
-    fontFamily: "Sora-Regular",
+  categories: {
+    paddingHorizontal: 20,
+    marginTop: 10,
+    marginBottom: 10,
   },
   categoriesScroll: {
-    marginBottom: 10,
+    flexGrow: 0,
+  },
+  categoriesContent: {
+    paddingRight: 20,
   },
   categoryButton: {
     paddingHorizontal: 20,
@@ -306,7 +382,10 @@ const styles = StyleSheet.create({
   categoryTextActive: {
     color: colors.white,
   },
-  coffeeList: {
+  coffeeGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
     paddingHorizontal: 20,
     paddingBottom: 30,
   },
@@ -315,8 +394,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginBottom: 20,
     padding: 15,
-    flexDirection: "row",
-    alignItems: "center",
+    width: "48%",
     shadowColor: colors.black,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -324,39 +402,27 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   coffeeImage: {
-    width: 100,
+    width: "100%",
     height: 100,
     borderRadius: 15,
     resizeMode: "cover",
-    marginRight: 15,
+    marginBottom: 12,
   },
   coffeeInfo: {
     flex: 1,
   },
   coffeeName: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
     color: colors.darkBrown,
     marginBottom: 4,
     fontFamily: "Sora-Bold",
   },
   coffeeDescription: {
-    fontSize: 14,
+    fontSize: 12,
     color: colors.textLight,
-    marginBottom: 8,
+    marginBottom: 10,
     fontFamily: "Sora-Regular",
-  },
-  ratingContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 8,
-  },
-  ratingText: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: colors.darkBrown,
-    marginLeft: 5,
-    fontFamily: "Sora-SemiBold",
   },
   priceRow: {
     flexDirection: "row",
@@ -364,17 +430,51 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   coffeePrice: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
     color: colors.brown,
     fontFamily: "Sora-Bold",
   },
   addButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
+    width: 36,
+    height: 36,
+    borderRadius: 10,
     backgroundColor: colors.brown,
     justifyContent: "center",
     alignItems: "center",
+  },
+  bottomPadding: {
+    height: 70, // Space for bottom nav
+  },
+  // BOTTOM NAVIGATION STYLES - ADDED
+  bottomNav: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    backgroundColor: colors.white,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderTopWidth: 1,
+    borderTopColor: colors.lightGray,
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 70,
+  },
+  navItem: {
+    alignItems: "center",
+    paddingHorizontal: 5,
+    flex: 1,
+  },
+  navText: {
+    fontSize: 10,
+    color: colors.textLight,
+    marginTop: 4,
+    fontFamily: "Sora-Regular",
+  },
+  navTextActive: {
+    color: colors.brown,
+    fontFamily: "Sora-SemiBold",
   },
 });
